@@ -1,37 +1,23 @@
 <template>
-  <div class="container mt-2">
-    <div class="input-group input-group-sm mb-3">
-      <input class="input-group" v-model="searchValue" type="text" />
-    </div>
-    <div v-for="(document, index) in search" :key="document.id">{{index + 1}}. {{ document.body }}</div>
+  <div id="app">
+    <img src="./assets/logo.png">
+    <router-view/>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 export default {
-  name: "app",
-  components: {},
-  data() {
-    return {
-      documents: [],
-      searchValue: ""
-    };
-  },
-  created() {
-    axios.get("https://jsonplaceholder.typicode.com/posts").then(res => {
-      this.documents = res.data;
-    });
-  },
-  computed: {
-    search() {
-      return this.documents.filter(data => {
-        return data.body.match(this.searchValue);
-      });
-    }
-  }
-};
+  name: 'App'
+}
 </script>
 
 <style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 </style>
