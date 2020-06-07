@@ -6,6 +6,9 @@
     <li class="nav-item">
       <router-link class="nav-link" :to="{ name: 'About'}">About</router-link>
     </li>
+    <li class="nav-item">
+      <router-link class="nav-link" :to="{ name: 'Profile'}">Profile</router-link>
+    </li>
   </ul>
 </template>
 
