@@ -1,28 +1,15 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "@/components/Home";
-import About from "@/components/About";
-import Profile from "@/components/Profile";
+import Vue from 'vue'
+import Router from 'vue-router'
+import HelloWorld from '@/components/HelloWorld'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
-  mode: "history",
   routes: [
     {
-      path: "/",
-      name: "Home",
-      component: Home
-    },
-    {
-      path: "/about",
-      name: "About",
-      component: About
-    },
-    {
-      path: "/profile/:id",
-      name: "Profile",
-      component: Profile
+      path: '/',
+      name: 'HelloWorld',
+      component: HelloWorld
     }
   ]
-});
+})

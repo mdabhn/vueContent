@@ -1,4 +1,4 @@
-# learning-porject
+# smoothies
 
 > A Vue.js project
 
