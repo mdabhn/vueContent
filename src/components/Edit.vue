@@ -1,7 +1,8 @@
 <template>
   <div class="container">
-    <h3 class="text-center mt-4">Create A New Smoothie</h3>
-    <form class="w-50 mx-auto form" @submit.prevent="createSmoothe">
+    <h3 class="text-center mt-4">Edit {{ this.$route.params.slug }}</h3>
+    <!--  -->
+    <form class="w-50 mx-auto form" @submit.prevent="editSmoothe">
       <div class="form-group row">
         <label for="title" class="col-sm-4 col-form-label">Title</label>
         <div class="col-sm-8">
@@ -10,27 +11,28 @@
             class="form-control"
             id="title"
             placeholder="Title"
-            v-model="title"
+            v-model="smoothie.title"
           />
         </div>
       </div>
 
       <div
         class="form-group row"
-        v-for="(ing, index) in ingredients"
+        v-for="(ing, index) in smoothie.ingredients"
         :key="index"
       >
         <label for="ingredient" class="col-sm-4 col-form-label">
           Added ingredient
         </label>
         <div class="col-sm-8">
+          <!--  -->
           <input
             type="text"
             class="form-control"
             id="ingredient"
             placeholder="Ingredient"
             value="ing"
-            v-model="ingredients[index]"
+            v-model="smoothie.ingredients[index]"
             @keydown.tab.prevent="addIngredient"
           />
         </div>
@@ -64,28 +66,44 @@ import db from "@/firebase/init";
 import firebase from "firebase";
 import slugify from "slugify";
 export default {
-  name: "Create",
+  name: "Edit",
   data() {
     return {
-      title: null,
-      ingredients: [],
-      slug: null,
+      smoothie: null,
       ingredient: null,
       feedback: null
     };
   },
+  created() {
+    let ref = db
+      .collection("smoothies")
+      .where("slug", "==", this.$route.params.slug);
+    ref
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(data => {
+          this.smoothie = data.data();
+          this.smoothie.id = data.id;
+        });
+      })
+      .then(() => {
+        console.log(this.smoothie);
+      })
+      .catch(err => {});
+  },
   methods: {
-    createSmoothe() {
-      if (this.title && this.ingredients.length > 0) {
+    editSmoothe() {
+      if (this.smoothie.title && this.smoothie.ingredients.length > 0) {
         this.feedback = null;
-        this.slug = slugify(this.title, {
+        this.smoothie.slug = slugify(this.smoothie.title, {
           lower: true
         });
         db.collection("smoothies")
-          .add({
-            title: this.title,
-            ingredients: this.ingredients,
-            slug: this.slug,
+          .doc(this.smoothie.id)
+          .update({
+            title: this.smoothie.title,
+            ingredients: this.smoothie.ingredients,
+            slug: this.smoothie.slug,
             created: firebase.firestore.FieldValue.serverTimestamp()
           })
           .then(() => {
@@ -97,10 +115,10 @@ export default {
     },
     addIngredient() {
       if (this.ingredient) {
-        this.ingredients.push(this.ingredient);
+        this.smoothie.ingredients.push(this.ingredient);
         this.ingredient = null;
         this.feedback = null;
-      } else if (this.ingredients.length == 0) {
+      } else if (this.smoothie.ingredients.length == 0) {
         this.feedback = "Add An Ingredent please...";
       }
     }
@@ -108,8 +126,4 @@ export default {
 };
 </script>
 
-<style>
-.form {
-  margin-top: 100px;
-}
-</style>
+<style></style>
