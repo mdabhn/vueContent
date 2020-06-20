@@ -54,6 +54,7 @@
         alias: null,
         password: null,
         feedback: null,
+        passed: true,
       }
     },
     methods: {
@@ -62,19 +63,15 @@
           replacement: '-',
           lower: true,
         })
-        let ref = db.collection('users').doc(this.slug)
+        let ref = db.collection('users').doc(`${this.slug}`)
         ref.get().then(doc => {
           if (!doc.exists) {
-            this.feedback = 'You can use this Alias'
             firebase
               .auth()
               .createUserWithEmailAndPassword(this.email, this.password)
               .catch(err => {
                 console.log(err)
               })
-          } else {
-            this.feedback =
-              'This alias has been taken, Please Eneter a new Alias'
           }
         })
       },
